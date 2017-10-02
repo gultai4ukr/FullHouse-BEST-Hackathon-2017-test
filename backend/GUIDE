@@ -1,0 +1,12 @@
+===
+Guide for installation backend dependencies and running local development server.
+===
+
+Install Python:
+sudo apt-get install python3.5
+
+Install binaries:
+pip3 install -r requirements.txt
+
+Run server:
+python3 manage.py runserver
