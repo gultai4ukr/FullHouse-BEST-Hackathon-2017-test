@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="header">
-      <icon name="circle-o-notch" scale="1.5" class="loader" spin/>
+      <icon name="circle-o-notch" scale="1.5" class="loader" v-if="loader" spin/>
       <input class="filterString" type="text" @keyup="updateList" v-model="filterQuery" autofocus>
    </div>
     <MainComponent :newsData="newsToShow"> </MainComponent>
@@ -15,10 +15,11 @@ import MainComponent from './components/Main'
 export default {
   data () {
     return {
-      url: 'http://konchytsv.pythonanywhere.com/',
+      url: 'http://127.0.0.1:8000',
       news: '',
       newsToShow: '',
-      filterQuery: ''
+      filterQuery: '',
+      loader: false
     }
   },
   components: {
@@ -26,7 +27,6 @@ export default {
   },
   created: function () {
     this.$http.get(this.url + '/articles/').then(res => {
-     // console.log(res.body);
       this.news = res.body;
       this.newsToShow = res.body;
     }).catch(e => console.log(e))
@@ -34,6 +34,14 @@ export default {
   methods: {
     updateList: function() {
       this.newsToShow = this.filteredNews
+    },
+    callAPI: function() {
+      return new Promise((resolve, reject) => {
+        this.$http.get(this.url + '/articles/').then(res => {
+        this.news = res.body;
+        this.newsToShow = res.body;
+        }).catch(e => console.log(e))
+      })
     }
   },
   computed: {
