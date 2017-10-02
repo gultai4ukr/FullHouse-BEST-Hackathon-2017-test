@@ -8,5 +8,8 @@ sudo apt-get install python3.5
 Install binaries:
 pip3 install -r requirements.txt
 
+Migrate database:
+python3 manage.py migrate
+
 Run server:
 python3 manage.py runserver
