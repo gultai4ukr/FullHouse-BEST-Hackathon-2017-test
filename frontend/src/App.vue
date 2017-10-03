@@ -59,7 +59,7 @@ export default {
     top: 0;
     bottom: 0;
     left: 0;
-    width: 80px;
+    width: 10vw;
     visibility: visible;
     transition: 0.5s;
     z-index: 1000;
@@ -69,24 +69,17 @@ export default {
     color: #fff;
     background-color: #506E92;
     transition: 0.5s;
-    transform: translate(-200px, -50px);
+    transform: translate(0px, 0px);
     cursor: pointer;
     padding: 5px;
-  }
-  div icon div font {
-    display: inline-block;
-    vertical-align: middle;
   }
   .sidebar div:hover {
     color: #506E92;
     background-color: #fff;
   }
-  .sidebar:hover {
-    visibility: visible;
-    width: 120px;
-  }
-  .sidebar:hover div {
-    transform: translate(0px, 0px);
+  div icon div font {
+    display: inline-block;
+    vertical-align: middle;
   }
   .loader {
     position: fixed;

@@ -32,7 +32,7 @@ export default {
   },
   created: async function () {
     this.loader = true;
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 16; i++) {
       this.news.push(await this.callAPI())
       let date = new Date(this.news[i].publishedAt)
       this.articleTime = date.toLocaleString()
@@ -87,7 +87,7 @@ function getRandomDelay (min, max) {
   .main {
     column-count: 4;
     column-gap: 0;
-    width: 90vw;
+    width: 85vw;
     float: right;
     overflow: hidden;
   }
