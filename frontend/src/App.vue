@@ -1,53 +1,42 @@
 <template>
   <div id="app">
-    <div class="header"></div>
-    <icon name="circle-o-notch" scale="2" class="loader" v-if="loader" spin/>
-    <MainComponent :items="newsToShow"> </MainComponent>
+    <div class="sidebar">
+      <div style="background-color:#8CA0B7" @click="changeParam('?language=de')"><icon name="globe"/> <font>DE</font></div>
+      <div style="background-color:#8CA0B7" @click="changeParam('?language=en')"><icon name="globe"/> <font>EN</font></div>
+      <div @click="changeParam('?category=music')"><icon name="music"/> <font>Music</font></div>
+      <div @click="changeParam('?category=business')"><icon name="briefcase"/> <font>Business</font></div>
+      <div @click="changeParam('?category=entertainmen')"><icon name="ravelry"/> <font>Entertainment</font></div>
+      <div @click="changeParam('?category=gaming')"><icon name="gamepad"/> <font>Gaming</font></div>
+      <div @click="changeParam('?category=general')"><icon name="newspaper-o"/> <font>General</font></div>
+      <div @click="changeParam('?category=sport')"><icon name="heartbeat"/> <font>Sport</font></div>
+      <div @click="changeParam('?category=politics')"><icon name="handshake-o"/> <font>Politics</font></div>
+      <div @click="changeParam('?category=technology')"><icon name="cogs"/> <font>Technology</font></div>
+      <div @click="changeParam('?category=science-and-nature')"><icon name="leaf"/> <font>Science and nature</font></div>
+      <div style="background-color:#F45B69" @click="changeParam('?country=it')"><icon name="flag"/> <font>Italy</font></div>
+      <div style="background-color:#F45B69" @click="changeParam('?country=us')"><icon name="flag"/> <font>USA</font></div>
+      <div style="background-color:#F45B69" @click="changeParam('?country=gb')"><icon name="flag"/> <font>Great Britain</font></div>
+    </div>
+    <MainComponent :param="param"> </MainComponent>
   </div>
 </template>
 
 <script>
-//import HeaderComponent from './components/Header'
 import MainComponent from './components/Main'
 
 export default {
   components: {
     MainComponent
   },
-
-  data () {
+  data() {
     return {
-      url: 'https://konchytsv.pythonanywhere.com',
-      news: '',
-      newsToShow: '',
-      filterQuery: '',
-      loader: false
+      param: ''
     }
   },
-  created: async function () {
-    // this.loader = true
-    // this.news = await this.callAPI()
-    // console.log(this.news)
-    // this.newsToShow = this.news
-    // this.loader = false
-    },
   methods: {
-    callAPI: function() {
-      return new Promise((resolve, reject) => {
-        this.$http.get(this.url + '/article/').then(res => {
-        resolve(res.body)
-        }).catch(e => console.log(e))
-      })
-    },
-  },
-  computed: {
-    // filteredNews() {
-    //   return this.news.filter(item => {
-    //      return item.title.toLowerCase().indexOf(this.filterQuery.toLowerCase()) > -1 ||
-    //      item.text.toLowerCase().indexOf(this.filterQuery.toLowerCase()) > -1
-    //   })
-    // }
-  },
+    changeParam: function(query) {
+      this.param = query
+    }
+  }
 }
 </script>
 
@@ -65,21 +54,46 @@ export default {
     text-align: center;
     color: #2c3e50;
   }
-  .header {
-    background: #A5B5C7;
-    padding: 1%;
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    visibility: visible;
+    transition: 0.5s;
+    z-index: 1000;
   }
-  .filterString {
-    outline: none;
-    padding: 0.5%;
-    font-size: 1.2em;
-    border-radius: 3px;
-    border: none;
+  .sidebar div {
+    text-align: center;
+    color: #fff;
+    background-color: #506E92;
+    transition: 0.5s;
+    transform: translate(-200px, -50px);
+    cursor: pointer;
+    padding: 5px;
+  }
+  div icon div font {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .sidebar div:hover {
+    color: #506E92;
+    background-color: #fff;
+  }
+  .sidebar:hover {
+    visibility: visible;
+    width: 120px;
+  }
+  .sidebar:hover div {
+    transform: translate(0px, 0px);
   }
   .loader {
-    position: relative;
-    display: block;
-    margin: 1% auto;
-    color: #999;
+    position: fixed;
+    left: 40px;
+    bottom: 30px;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: #3F6083;
   }
 </style>

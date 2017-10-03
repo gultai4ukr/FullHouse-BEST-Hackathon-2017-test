@@ -1,17 +1,16 @@
 <template>
   <div class="main">
-    <!--ость так я думаю будуть йти параметри в метод при кліку,
-     якщо будуть інші пропозиції переробим, просто що в голову прийшло те і зробив-->
-    <button @click="updateNews(category[0], filterQuery[0])">CLICK ME</button>
-    <div class="item" v-for="item in newsToShow">
+    <icon name="circle-o-notch" scale="2" class="loader" v-if="loader" spin/>
+    <div class="item" v-for="item in news">
       <a :href="item.url" style="text-decoration:none; color:#3F6083">
       <div>
+        {{ !item.urlToImage ? item.urlToImage = 'https://www.jordans.com/~/media/jordans%20redesign/no-image-found.ashx?h=275&la=en&w=275&hash=F87BC23F17E37D57E2A0B1CC6E2E3EEE312AAD5B' : null }}
         <img v-bind:src="item.urlToImage" />
 
       <div class="news-content">
         <div>{{ item.title }}</div>
         <div>{{ item.text }}</div>
-        <div>{{ articleTime }}</div>
+        <div class="date">{{ articleTime }}</div>
       </div>
     </div>
     </a>
@@ -22,50 +21,43 @@
 
 <script>
 export default {
+  props: ['param'],
   data () {
     return {
       url: 'https://konchytsv.pythonanywhere.com',
       news: [],
-      newsToShow: [],
-      filterQuery: ['category', 'country', 'language'],
-      category: [
-        'business', 'entertainment', 'gaming', 'general', 'music',
-        'politics', 'science-and-nature', 'sport', 'technology'
-      ],
-      country:  ['au', 'de', 'gb', 'in', 'it', 'us'],
-      language: ['de, en'],
       loader: false,
       articleTime: ''
     }
   },
   created: async function () {
     this.loader = true;
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 18; i++) {
       this.news.push(await this.callAPI())
-    }
+      let date = new Date(this.news[i].publishedAt)
+      this.articleTime = date.toLocaleString()
 
-    for(let i = 0; i < this.news.length; i++){
-      let date = new Date(this.news[i].publishedAt);
-      this.articleTime = date.toLocaleString();
-    }
-    this.newsToShow = this.news;
-    this.loader = false;
-
-   for (let i = 0; i < 8; i++) {
       setInterval(async () => {
         this.news.splice(i, 1, (await this.callAPI()))
-      }, getRandomDelay(1000, 4000))
+      }, getRandomDelay(14000, 17000))
+    }
+
+    this.loader = false;
+  },
+  watch: {
+    news: function() {
+      this.loader = true
+      setTimeout(() => this.loader = false, 2500)
     }
   },
   methods: {
     /**
      * @returns {Promise}
-     * @param param {string} depends of button -> category || country
      */
-    callAPI: function(param) {
+    callAPI: function() {
       return new Promise((resolve, reject) => {
-        if (param) {
-          this.$http.get(this.url + '/article/' + param).then(res => {
+        if (this.param) {
+          this.$http.get(this.url + '/article/' + this.param).then(res => {
             resolve(res.body)
           }).catch(e => console.log(e))
         } else {
@@ -75,19 +67,8 @@ export default {
         }
       })
     },
-    /**
-     * @param param {string} type of category || country
-     * @param type {string} type of filter
-     */
-    updateNews : function(param, type) {
-      this.news.splice(0, this.news.length);
-      let getParam = "?" + type + "=" + param;
-      let self = this;
-      setTimeout(async function () {
-        for(let i = 0; i < 8; i++) {
-          self.news.push(await self.callAPI(getParam));
-        }
-      }, 4000);
+    changeURL: function (param) {
+      this.param = param
     }
   }
 }
@@ -105,10 +86,13 @@ function getRandomDelay (min, max) {
   }
   .main {
     column-count: 4;
-    column-gap: 1;
-    width: 100vw;
+    column-gap: 0;
+    width: 90vw;
+    float: right;
+    overflow: hidden;
   }
   .item {
+    margin: 3%;
     margin-top: 2%;
     border: 1px solid #8CA0B7;
     background-color: #F5F7F9;
@@ -116,7 +100,6 @@ function getRandomDelay (min, max) {
     -moz-box-shadow: 0px 4px 15px -1px rgba(140,160,183,1);
     box-shadow: 0px 4px 15px -1px rgba(140,160,183,1);
     display: inline-block;
-    width: 90%;
     vertical-align: top;
   }
   .item img {
@@ -140,5 +123,7 @@ function getRandomDelay (min, max) {
   .link:hover {
     color: #F5F7F9;
   }
-
+  .date {
+    background-color: #ccc;
+  }
 </style>
