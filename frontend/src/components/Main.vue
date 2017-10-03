@@ -104,23 +104,20 @@ function getRandomDelay (min, max) {
     padding: 2px;
   }
   .main {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    align-items:stretch
+    column-count: 4;
+    column-gap: 1;
+    width: 100vw;
   }
   .item {
+    margin-top: 2%;
     border: 1px solid #8CA0B7;
     background-color: #F5F7F9;
-    margin: 0.5%;
-    width:20%;
-    position: relative;
-    max-width: 20%;
-    height: auto;
     -webkit-box-shadow: 0px 4px 15px -1px rgba(140,160,183,1);
     -moz-box-shadow: 0px 4px 15px -1px rgba(140,160,183,1);
     box-shadow: 0px 4px 15px -1px rgba(140,160,183,1);
+    display: inline-block;
+    width: 90%;
+    vertical-align: top;
   }
   .item img {
     position: relative;
