@@ -1,8 +1,7 @@
 from django.conf.urls import url
 
-from articles.api.views import ArticlesListCreateAPIView, ArticleRetrieveAPIView
+from articles.api.views import ArticleGetAPIView
 
 urlpatterns = [
-    url(r'^$', ArticlesListCreateAPIView.as_view()),
-    url(r'^(?P<id>[0-9]+)/$', ArticleRetrieveAPIView.as_view()),
+    url(r'^article/$', ArticleGetAPIView.as_view())
 ]
