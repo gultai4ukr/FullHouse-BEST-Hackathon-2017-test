@@ -8,6 +8,7 @@ constantly==15.1.0
 cryptography==2.0.3
 cssselect==1.0.1
 Django==1.11.5
+django-cors-headers==2.1.0
 django-filter==1.0.4
 djangorestframework==3.6.4
 hyperlink==17.3.1
