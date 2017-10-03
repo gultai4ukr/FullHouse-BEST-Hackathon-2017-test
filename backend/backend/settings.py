@@ -122,3 +122,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+NEWS_API_KEY = '424f700de54f4e5b876612f6d376f81c'

@@ -74,3 +74,15 @@ class ArticleRetrieveAPITest(APITestCase):
         response = self.client.get('/articles/0/')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class ArticleGetAPITest(APITestCase):
+
+    def test_get_article(self):
+
+        response = self.client.get('/article/')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(set(response.data.keys()), {
+            'author', 'title', 'description', 'url', 'urlToImage', 'publishedAt'
+        })
