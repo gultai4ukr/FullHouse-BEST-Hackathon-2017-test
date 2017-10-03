@@ -1,79 +1,7 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from articles.models import Article
-
-
-class ArticlesListCreateAPITest(APITestCase):
-
-    def setUp(self):
-        Article.objects.create(
-            title="Title 1", text="Text 1"
-        )
-        Article.objects.create(
-            title="Title 2", text="Text 2"
-        )
-
-    def test_get_articles_list(self):
-
-        response = self.client.get('/articles/')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, [
-            {
-                'title': "Title 2",
-                'text': "Text 2"
-            },
-            {
-                'title': "Title 1",
-                'text': "Text 1"
-            }
-        ])
-
-    def test_create_article(self):
-
-        response = self.client.post(
-            '/articles/',
-            data={
-                'title': "Title 3",
-                'text': "Text 3",
-            }
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data, {
-            'title': "Title 3",
-            'text': "Text 3"
-        })
-
-
-class ArticleRetrieveAPITest(APITestCase):
-
-    def setUp(self):
-        self.article = Article.objects.create(
-            title="Title 1", text="Text 1"
-        )
-        Article.objects.create(
-            title="Title 2", text="Text 2"
-        )
-
-    def test_retrieve_article(self):
-
-        response = self.client.get(
-            '/articles/{id}/'.format(id=self.article.id)
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, {
-            'title': "Title 1",
-            'text': "Text 1"
-        })
-
-    def test_retrieve_not_existing_article(self):
-
-        response = self.client.get('/articles/0/')
-
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+from articles.api.views import ArticleGetAPIView
 
 
 class ArticleGetAPITest(APITestCase):
@@ -84,5 +12,41 @@ class ArticleGetAPITest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(set(response.data.keys()), {
-            'author', 'title', 'description', 'url', 'urlToImage', 'publishedAt'
+            'author', 'title', 'description', 'url', 'urlToImage', 'publishedAt', 'source'
         })
+
+    def test_get_article_by_category(self):
+
+        response = self.client.get(
+            '/article/?category=business'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(set(response.data.keys()), {
+            'author', 'title', 'description', 'url', 'urlToImage', 'publishedAt', 'source'
+        })
+        self.assertIn(response.data['source'], ArticleGetAPIView.SOURCES_BY_CATEGORY['business'])
+
+    def test_get_article_by_language(self):
+
+        response = self.client.get(
+            '/article/?language=en'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(set(response.data.keys()), {
+            'author', 'title', 'description', 'url', 'urlToImage', 'publishedAt', 'source'
+        })
+        self.assertIn(response.data['source'], ArticleGetAPIView.SOURCES_BY_LANGUAGE['en'])
+
+    def test_get_article_by_country(self):
+
+        response = self.client.get(
+            '/article/?country=us'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(set(response.data.keys()), {
+            'author', 'title', 'description', 'url', 'urlToImage', 'publishedAt', 'source'
+        })
+        self.assertIn(response.data['source'], ArticleGetAPIView.SOURCES_BY_COUNTRY['us'])
