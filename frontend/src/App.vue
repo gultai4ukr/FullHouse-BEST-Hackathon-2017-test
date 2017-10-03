@@ -1,10 +1,11 @@
 <template>
   <div id="app">
     <div class="header">
-      <icon name="circle-o-notch" scale="1.5" class="loader" spin/>
       <input class="filterString" type="text" @keyup="updateList" v-model="filterQuery" autofocus>
+      <button @click="refresh">Refresh</button>
    </div>
-    <MainComponent :newsData="newsToShow"> </MainComponent>
+    <icon name="circle-o-notch" scale="2" class="loader" v-if="loader" spin/>
+    <MainComponent :items="newsToShow"> </MainComponent>
   </div>
 </template>
 
@@ -15,34 +16,48 @@ import MainComponent from './components/Main'
 export default {
   data () {
     return {
-      url: 'http://konchytsv.pythonanywhere.com/',
+      url: 'https://konchytsv.pythonanywhere.com',
       news: '',
       newsToShow: '',
-      filterQuery: ''
+      filterQuery: '',
+      loader: false
     }
   },
   components: {
     MainComponent
   },
-  created: function () {
-    this.$http.get(this.url + '/articles/').then(res => {
-     // console.log(res.body);
-      this.news = res.body;
-      this.newsToShow = res.body;
-    }).catch(e => console.log(e))
+  created: async function () {
+    // this.loader = true
+    // this.news = await this.callAPI()
+    // console.log(this.news)
+    // this.newsToShow = this.news
+    // this.loader = false
   },
   methods: {
     updateList: function() {
       this.newsToShow = this.filteredNews
+    },
+    callAPI: function() {
+      return new Promise((resolve, reject) => {
+        this.$http.get(this.url + '/article/').then(res => {
+        resolve(res.body)
+        }).catch(e => console.log(e))
+      })
+    },
+    refresh: async function() {
+      this.loader = true
+      this.news = await this.callAPI()
+      this.newsToShow = this.news
+      this.loader = false
     }
   },
   computed: {
-    filteredNews() {
-      return this.news.filter(item => {
-         return item.title.toLowerCase().indexOf(this.filterQuery.toLowerCase()) > -1 ||
-         item.text.toLowerCase().indexOf(this.filterQuery.toLowerCase()) > -1
-      })
-    }
+    // filteredNews() {
+    //   return this.news.filter(item => {
+    //      return item.title.toLowerCase().indexOf(this.filterQuery.toLowerCase()) > -1 ||
+    //      item.text.toLowerCase().indexOf(this.filterQuery.toLowerCase()) > -1
+    //   })
+    // }
   }
 }
 </script>
@@ -73,8 +88,9 @@ export default {
     border: none;
   }
   .loader {
-    color: #fff;
-    vertical-align: middle;
-    float: left;
+    position: relative;
+    display: block;
+    margin: 1% auto;
+    color: #999;
   }
 </style>
