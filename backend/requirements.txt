@@ -3,7 +3,7 @@ chardet==3.0.4
 Django==1.11.5
 django-cors-headers==2.1.0
 django-filter==1.0.4
-djangorestframework==3.6.4
+djangorestframework==3.11.2
 Markdown==2.6.9
 pytz==2017.2
 requests==2.18.4
